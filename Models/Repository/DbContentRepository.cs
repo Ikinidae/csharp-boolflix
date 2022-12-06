@@ -6,7 +6,7 @@ namespace csharp_boolflix.Models.Repository
     public class DbContentRepository : IContentRepository
     {
         private BoolflixDbContext db;
-        public DbContentRepository(BoolflixDbContext _db)
+        public DbContentRepository(BoolflixDbContext _db) : base()
         {
             db = _db;
         }
@@ -21,7 +21,7 @@ namespace csharp_boolflix.Models.Repository
             return db.Films.Where(f => f.Id == id).Include("Actors").Include("Categories").Include("Director").FirstOrDefault();
         }
 
-        public void CreateFilm(Film film, List<int> selectedActors, List<int> selectedCategories, Director director)
+        public void CreateFilm(Film film, List<int> selectedActors, List<int> selectedCategories)
         {
 
             film.Actors = new List<Actor>();
@@ -40,11 +40,16 @@ namespace csharp_boolflix.Models.Repository
                 film.Categories.Add(category);
             }
 
-            film.Director = director;
-
             db.Films.Add(film);
             db.SaveChanges();
         }
+
+        public void Delete(Film film)
+        {
+            db.Films.Remove(film);
+            db.SaveChanges();
+        }
+
 
         //Serie
         //public List<Serie> AllSeries()

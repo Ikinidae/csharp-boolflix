@@ -28,7 +28,7 @@ namespace csharp_boolflix.Controllers
 
         public IActionResult Create()
         {
-            ContentForm formData = new ContentForm();
+            FormFilm formData = new FormFilm();
             formData.Film = new Film();
             formData.Directors = db.Directors.ToList();
             
@@ -51,35 +51,60 @@ namespace csharp_boolflix.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateFilm(ContentForm formData)
+        public IActionResult Create(FormFilm formData)
         {
             if (!ModelState.IsValid)
-            {               
+            {
+                formData.Directors = db.Directors.ToList();
+
+                formData.Actors = new List<SelectListItem>();
+                List<Actor> actorsList = db.Actors.ToList();
+                foreach (Actor actor in actorsList)
+                {
+                    formData.Actors.Add(new SelectListItem(actor.Name, actor.Id.ToString()));
+                }
+
+                formData.Categories = new List<SelectListItem>();
+                List<Category> categoryList = db.Categories.ToList();
+                foreach (Category category in categoryList)
+                {
+                    formData.Categories.Add(new SelectListItem(category.Name, category.Id.ToString()));
+                }
 
                 return View(formData);
+                
             }
 
-            formData.Directors = db.Directors.ToList();
+                Director director = db.Directors.Where(d => d.Id == formData.Film.DirectorId).FirstOrDefault();
+            
 
-            formData.Actors = new List<SelectListItem>();
-            List<Actor> actorsList = db.Actors.ToList();
-            foreach (Actor actor in actorsList)
-            {
-                formData.Actors.Add(new SelectListItem(actor.Name, actor.Id.ToString()));
-            }
-
-            formData.Categories = new List<SelectListItem>();
-            List<Category> categoryList = db.Categories.ToList();
-            foreach (Category category in categoryList)
-            {
-                formData.Categories.Add(new SelectListItem(category.Name, category.Id.ToString()));
-            }
-
-            Director director = db.Directors.Where(d => d.Id == formData.Film.DirectorId).FirstOrDefault();
 
             //db.Pizzas.Add(formData.Pizza);
             //db.SaveChanges();
-            contentRepository.CreateFilm(formData.Film, formData.SelectedCategories, formData.SelectedActors, director);
+            contentRepository.CreateFilm(formData.Film, formData.SelectedCategories, formData.SelectedActors);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Details(int id)
+        {
+            Film film = contentRepository.GetFilmById(id);
+
+            return View(film);
+        }
+
+        //delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            Film film = contentRepository.GetFilmById(id);
+            if (film == null)
+            {
+                return NotFound();
+            }
+
+            contentRepository.Delete(film);
 
             return RedirectToAction("Index");
         }
