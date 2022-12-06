@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using csharp_boolflix.Data;
+using csharp_boolflix.Models.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BoolflixDbContextConnection");
@@ -10,6 +11,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<BoolflixDbContext>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<BoolflixDbContext>();
+
+//per far partire con db se funziona
+builder.Services.AddScoped<IContentRepository, DbContentRepository>();
+
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
@@ -33,6 +41,6 @@ app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Guest}/{action=Index}/{id?}");
 
 app.Run();

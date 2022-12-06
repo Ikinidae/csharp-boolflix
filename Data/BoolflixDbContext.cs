@@ -13,6 +13,8 @@ namespace csharp_boolflix.Data
         public DbSet<Actor> Actors { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Season> Seasons { get; set; }
+        public DbSet<Content> Contents { get; set; }
+        public DbSet<Director> Directors { get; set; }
 
         public BoolflixDbContext(DbContextOptions<BoolflixDbContext> options)
         : base(options)
