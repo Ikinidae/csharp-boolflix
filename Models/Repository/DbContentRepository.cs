@@ -44,7 +44,7 @@ namespace csharp_boolflix.Models.Repository
             db.SaveChanges();
         }
 
-        public void Delete(Film film)
+        public void DeleteFilm(Film film)
         {
             db.Films.Remove(film);
             db.SaveChanges();
@@ -52,37 +52,43 @@ namespace csharp_boolflix.Models.Repository
 
 
         //Serie
-        //public List<Serie> AllSeries()
-        //{
-        //    return db.Series.Include(serie => serie.Actors).Include(serie => serie.Genres).Include(serie => serie.Seasons).ToList();
-        //}
+        public List<Serie> AllSeries()
+        {
+            return db.Series.Include(serie => serie.Actors).Include(serie => serie.Categories).Include(serie => serie.Director).ToList();
+        }
 
-        //public Serie GetSerieById(int id)
-        //{
-        //    return db.Series.Where(s => s.Id == id).Include("Actors").Include("Genres").Include("Seasons").FirstOrDefault();
-        //}
+        public Serie GetSerieById(int id)
+        {
+            return db.Series.Where(s => s.Id == id).Include("Actors").Include("Categories").Include("Director").FirstOrDefault();
+        }
 
-        //public void CreateSerie(Serie serie, List<int> selectedActors, List<int> selectedGenres, Season season)
-        //{
+        public void CreateSerie(Serie serie, List<int> selectedActors, List<int> selectedCategory)
+        {
 
-        //    serie.Actors = new List<Actor>();
+            serie.Actors = new List<Actor>();
 
-        //    foreach (int actorId in selectedActors)
-        //    {
-        //        Actor actor = db.Actors.Where(a => a.Id == actorId).FirstOrDefault();
-        //        serie.Actors.Add(actor);
-        //    }
+            foreach (int actorId in selectedActors)
+            {
+                Actor actor = db.Actors.Where(a => a.Id == actorId).FirstOrDefault();
+                serie.Actors.Add(actor);
+            }
 
-        //    serie.Genres = new List<Genre>();
+            serie.Categories = new List<Category>();
 
-        //    foreach (int genreId in selectedGenres)
-        //    {
-        //        Genre genre = db.Genres.Where(g => g.Id == genreId).FirstOrDefault();
-        //        serie.Genres.Add(genre);
-        //    }
+            foreach (int categoryId in selectedCategory)
+            {
+                Category category = db.Categories.Where(g => g.Id == categoryId).FirstOrDefault();
+                serie.Categories.Add(category);
+            }
 
-        //    db.Series.Add(serie);
-        //    db.SaveChanges();
-        //}
+            db.Series.Add(serie);
+            db.SaveChanges();
+        }
+
+        public void DeleteSerie(Serie serie)
+        {
+            db.Series.Remove(serie);
+            db.SaveChanges();
+        }
     }
 }

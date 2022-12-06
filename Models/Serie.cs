@@ -2,7 +2,6 @@
 {
     public class Serie : Content
     {
-        public int EpisodesNumber { get; set; }
-        public List<Season> Seasons { get; set; }
+        public List<Season>? Seasons { get; set; }
     }
 }

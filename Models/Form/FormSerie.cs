@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace csharp_boolflix.Models
+namespace csharp_boolflix.Models.Form
 {
-    public class FormFilm
+    public class FormSerie
     {
-        public Film Film { get; set; }
+        public Serie Serie { get; set; }
         public List<SelectListItem>? Categories { get; set; }
         public List<int>? SelectedCategories { get; set; }
         public List<SelectListItem>? Actors { get; set; }

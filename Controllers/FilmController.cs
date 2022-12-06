@@ -1,5 +1,6 @@
 ﻿using csharp_boolflix.Data;
 using csharp_boolflix.Models;
+using csharp_boolflix.Models.Form;
 using csharp_boolflix.Models.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace csharp_boolflix.Controllers
 {
     [Authorize]
-    [Route("[controller]/[action]/{id?}", Order = 0)]
+    //[Route("[controller]/[action]/{id?}", Order = 0)]
     public class FilmController : Controller
     {
         BoolflixDbContext db;
@@ -75,12 +76,8 @@ namespace csharp_boolflix.Controllers
                 
             }
 
-                Director director = db.Directors.Where(d => d.Id == formData.Film.DirectorId).FirstOrDefault();
-            
+            Director director = db.Directors.Where(d => d.Id == formData.Film.DirectorId).FirstOrDefault();
 
-
-            //db.Pizzas.Add(formData.Pizza);
-            //db.SaveChanges();
             contentRepository.CreateFilm(formData.Film, formData.SelectedCategories, formData.SelectedActors);
 
             return RedirectToAction("Index");
@@ -104,7 +101,7 @@ namespace csharp_boolflix.Controllers
                 return NotFound();
             }
 
-            contentRepository.Delete(film);
+            contentRepository.DeleteFilm(film);
 
             return RedirectToAction("Index");
         }
