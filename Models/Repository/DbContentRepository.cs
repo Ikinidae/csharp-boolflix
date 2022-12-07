@@ -1,5 +1,6 @@
 ﻿using csharp_boolflix.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace csharp_boolflix.Models.Repository
 {
@@ -54,12 +55,12 @@ namespace csharp_boolflix.Models.Repository
         //Serie
         public List<Serie> AllSeries()
         {
-            return db.Series.Include(serie => serie.Actors).Include(serie => serie.Categories).Include(serie => serie.Director).ToList();
+            return db.Series.Include(serie => serie.Actors).Include(serie => serie.Categories).Include(serie => serie.Director).Include(serie => serie.Seasons).ToList();
         }
 
         public Serie GetSerieById(int id)
         {
-            return db.Series.Where(s => s.Id == id).Include("Actors").Include("Categories").Include("Director").FirstOrDefault();
+            return db.Series.Where(s => s.Id == id).Include("Actors").Include("Categories").Include("Director").Include("Seasons").Include("Seasons.Episodes").FirstOrDefault();
         }
 
         public void CreateSerie(Serie serie, List<int> selectedActors, List<int> selectedCategory)
@@ -89,6 +90,25 @@ namespace csharp_boolflix.Models.Repository
         {
             db.Series.Remove(serie);
             db.SaveChanges();
+        }
+
+        //stagione
+        public void CreateSeason (Season season)
+        {
+            db.Seasons.Add(season);
+            db.SaveChanges();
+        }
+
+        //episodes
+        public void CreateEpisode(Episode episode)
+        {
+            db.Episodes.Add(episode);
+            db.SaveChanges();
+        }
+
+        public List<Episode> GetEpisodes(int id)
+        {
+            return db.Episodes.Where(e => e.SeasonId == id).ToList();
         }
     }
 }

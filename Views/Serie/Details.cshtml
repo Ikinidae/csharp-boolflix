@@ -53,8 +53,50 @@
                 {
                     <span>Non sono stati selezionati attori</span>
                 }
+            </p>
+            <p>
+                <strong>Stagioni:</strong>
+                @if (Model.Seasons.Count > 0)
+                {
+                    <div>
+                        <ul>
+                            @foreach (Season season in Model.Seasons)
+                            {                                                  
+                                <li>
+                                    <span>@season.Title</span>
+                                    <span>
+                                        <a class="m-2 btn btn-info" asp-area="" asp-controller="Serie" asp-action="AddEpisode" asp-route-id="@season.Id">Aggiungi Episodio</a>
+                                    </span>
+                                </li>
+
+                                @if (season.Episodes.Count > 0)
+                                {
+                                    <ul>
+                                        @foreach (Episode episode in season.Episodes)
+                                        {
+                                            <li>
+                                                <p>@episode.Name</p>
+                                                <p>Durata: @episode.Duration minuti</p>
+                                                <p>Trama: @episode.Description</p>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span>Non sono stati inseriti episodi</span>                                    
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <span>Non sono state inserite stagioni.</span>
+                }
 
             </p>
+            <a class="m-2 btn btn-info" asp-area="" asp-controller="Serie" asp-action="AddSeason" asp-route-id="@Model.Id">Aggiungi Stagione</a>
         </div>
     </div>
 </div>

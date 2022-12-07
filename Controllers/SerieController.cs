@@ -105,6 +105,7 @@ namespace csharp_boolflix.Controllers
             return RedirectToAction("Index");
         }
 
+        //stagione
         public IActionResult AddSeason(int id)
         {
             Season season = new Season();
@@ -123,7 +124,29 @@ namespace csharp_boolflix.Controllers
                 return View(season);
             }
             contentRepository.CreateSeason(season);
-            return RedirectToAction("Detail", new { id = season.SerieId });
+            return RedirectToAction("Details", new { id = season.SerieId });
+        }
+
+        //episodio
+        public IActionResult AddEpisode(int id)
+        {
+            Episode episode = new Episode();
+            episode.SeasonId = id;
+            return View(episode);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddEpisode(Episode episode, int id)
+        {
+            episode.Id = 0;
+            episode.SeasonId = id;
+            if (!ModelState.IsValid)
+            {
+                return View(episode);
+            }
+            contentRepository.CreateEpisode(episode);
+            return RedirectToAction("Index");
         }
     }
 }

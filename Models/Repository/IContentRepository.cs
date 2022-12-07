@@ -14,5 +14,6 @@
         Serie GetSerieById(int id);
         void DeleteSerie(Serie serie);
         void CreateSeason(Season season);
+        void CreateEpisode(Episode episode);
     }
 }
